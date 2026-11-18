@@ -1,17 +1,18 @@
 <div class="filament-hidden">
 
-![FilaKit](https://raw.githubusercontent.com/jeffersongoncalves/filakitv5/main/art/jeffersongoncalves-filakitv5.png)
+![CcpaKit](https://raw.githubusercontent.com/jeffersongoncalves/ccpakitv5/main/art/jeffersongoncalves-ccpakitv5.png)
 
 </div>
 
-# FilaKit Start Kit Filament 5.x and Laravel 13.x
+# CcpaKit Start Kit Filament 5.x and Laravel 13.x
 
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-FFDD00?style=flat-square&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/jeffersongoncalves)
 
-## About FilaKit
+## About CcpaKit
 
-FilaKit is a robust starter kit built on Laravel 13.x and Filament 5.x, designed to accelerate the development of modern
-web applications with a ready-to-use multi-panel structure.
+CcpaKit is a robust starter kit built on Laravel 13.x and Filament 5.x, designed to accelerate the development of modern
+web applications with a ready-to-use multi-panel structure and the CCPA privacy suite already installed: the tooling for
+the California Consumer Privacy Act (CCPA/CPRA), managed from the Admin panel.
 
 ## Features
 
@@ -21,7 +22,8 @@ web applications with a ready-to-use multi-panel structure.
     - Admin Panel (`/admin`) - For system administrators
     - App Panel (`/app`) - For authenticated application users
     - Public Panel (frontend interface) - For visitors
-- **Environment Configuration** - Centralized configuration through the `config/filakit.php` file
+- **CCPA privacy suite** - every `laravel-ccpa*` package and its `filament-ccpa*` plugin (3.x), wired into the Admin panel
+- **Environment Configuration** - Centralized configuration through the `config/ccpakit.php` file
 
 ## System Requirements
 
@@ -33,7 +35,7 @@ web applications with a ready-to-use multi-panel structure.
 
 Clone the repository
 ``` bash
-laravel new my-app --using=jeffersongoncalves/filakitv5 --database=mysql
+laravel new my-app --using=jeffersongoncalves/ccpakitv5 --database=mysql
 ```
 
 ### Using FilaKit CLI
@@ -41,14 +43,14 @@ laravel new my-app --using=jeffersongoncalves/filakitv5 --database=mysql
 Or use [FilaKit CLI](https://github.com/jeffersongoncalves/filakit-cli) for a simplified setup:
 
 ```bash
-filakit new my-app --kit=jeffersongoncalves/filakitv5
+filakit new my-app --kit=jeffersongoncalves/ccpakitv5
 ```
 
 > Install FilaKit CLI: `composer global require jeffersongoncalves/filakit-cli`
 
 ###  Easy Installation
 
-FilaKit can be easily installed using the following command:
+CcpaKit can be easily installed using the following command:
 
 ```bash
 php install.php
@@ -99,7 +101,7 @@ php artisan serve
 
 Clone the repository
 ```bash
-laravel new my-app --using=jeffersongoncalves/filakitv5 --database=mysql
+laravel new my-app --using=jeffersongoncalves/ccpakitv5 --database=mysql
 ```
 
 Move into the project directory
@@ -154,9 +156,35 @@ Install JavaScript dependencies
 pnpm install
 ```
 
+## CCPA privacy suite
+
+The kit ships the whole CCPA suite for the California Consumer Privacy Act (CCPA/CPRA):
+
+| Package | Filament plugin |
+|---|---|
+| [laravel-ccpa](https://github.com/jeffersongoncalves/laravel-ccpa) | [filament-ccpa](https://github.com/jeffersongoncalves/filament-ccpa) |
+| [laravel-ccpa-opt-out](https://github.com/jeffersongoncalves/laravel-ccpa-opt-out) | [filament-ccpa-opt-out](https://github.com/jeffersongoncalves/filament-ccpa-opt-out) |
+| [laravel-ccpa-requests](https://github.com/jeffersongoncalves/laravel-ccpa-requests) | [filament-ccpa-requests](https://github.com/jeffersongoncalves/filament-ccpa-requests) |
+| [laravel-ccpa-retention](https://github.com/jeffersongoncalves/laravel-ccpa-retention) | [filament-ccpa-retention](https://github.com/jeffersongoncalves/filament-ccpa-retention) |
+| [laravel-ccpa-audit-log](https://github.com/jeffersongoncalves/laravel-ccpa-audit-log) | [filament-ccpa-audit-log](https://github.com/jeffersongoncalves/filament-ccpa-audit-log) |
+| [laravel-ccpa-breaches](https://github.com/jeffersongoncalves/laravel-ccpa-breaches) | [filament-ccpa-breaches](https://github.com/jeffersongoncalves/filament-ccpa-breaches) |
+| [laravel-ccpa-notices](https://github.com/jeffersongoncalves/laravel-ccpa-notices) | [filament-ccpa-notices](https://github.com/jeffersongoncalves/filament-ccpa-notices) |
+| [laravel-ccpa-vendors](https://github.com/jeffersongoncalves/laravel-ccpa-vendors) | [filament-ccpa-vendors](https://github.com/jeffersongoncalves/filament-ccpa-vendors) |
+| [laravel-ccpa-risk-assessments](https://github.com/jeffersongoncalves/laravel-ccpa-risk-assessments) | [filament-ccpa-risk-assessments](https://github.com/jeffersongoncalves/filament-ccpa-risk-assessments) |
+| [laravel-ccpa-minors](https://github.com/jeffersongoncalves/laravel-ccpa-minors) | [filament-ccpa-minors](https://github.com/jeffersongoncalves/filament-ccpa-minors) |
+
+- `App\Models\User` is the data subject: it implements `HasPersonalData` and declares its `name` and `email` with `#[PersonalData]`.
+  Declare every personal column you add, on this model and on your own models, and list those models in `config/ccpa.php`.
+- The migrations are already in `database/migrations`: `php artisan migrate` creates every table of the suite.
+- Every plugin is registered in `app/Providers/Filament/AdminPanelProvider.php`, under the **CCPA** navigation group.
+- `tests/Feature/CcpaSuiteTest.php` checks the declarations and opens every page of the suite.
+
+Each package's README explains its configuration, events and scheduled commands. The suite gives you tooling: it does not make
+you compliant on its own, you still need legal review.
+
 ## Authentication Structure
 
-FilaKit comes pre-configured with a custom authentication system that supports different types of users:
+CcpaKit comes pre-configured with a custom authentication system that supports different types of users:
 
 - `Admin` - For administrative panel access
 - `User` - For application panel access
@@ -183,16 +211,16 @@ Panels can be customized through their respective providers:
 - `app/Providers/Filament/AppPanelProvider.php`
 - `app/Providers/Filament/PublicPanelProvider.php`
 
-Alternatively, these settings are also consolidated in the `config/filakit.php` file for easier management.
+Alternatively, these settings are also consolidated in the `config/ccpakit.php` file for easier management.
 
 ### Themes and Colors
 
 Each panel can have its own color scheme, which can be easily modified in the corresponding Provider files or in the
-`filakit.php` configuration file.
+`ccpakit.php` configuration file.
 
 ### Configuration File
 
-The `config/filakit.php` file centralizes the configuration of the starter kit, including:
+The `config/ccpakit.php` file centralizes the configuration of the starter kit, including:
 
 - Panel routes
 - Middleware for each panel
@@ -286,7 +314,7 @@ Reference
 
 ## Resources
 
-FilaKit includes support for:
+CcpaKit includes support for:
 
 - User and admin management
 - Multi-guard authentication system

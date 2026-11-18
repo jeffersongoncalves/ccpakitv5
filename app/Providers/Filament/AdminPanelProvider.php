@@ -25,6 +25,16 @@ use Illuminate\Support\Facades\Vite;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use JeffersonGoncalves\Filament\Admin\AdminPlugin;
 use JeffersonGoncalves\Filament\Admin\Pages\Auth\Login;
+use JeffersonGoncalves\Filament\Ccpa\CcpaPlugin;
+use JeffersonGoncalves\Filament\CcpaAuditLog\CcpaAuditLogPlugin;
+use JeffersonGoncalves\Filament\CcpaBreaches\CcpaBreachesPlugin;
+use JeffersonGoncalves\Filament\CcpaMinors\CcpaMinorsPlugin;
+use JeffersonGoncalves\Filament\CcpaNotices\CcpaNoticesPlugin;
+use JeffersonGoncalves\Filament\CcpaOptOut\CcpaOptOutPlugin;
+use JeffersonGoncalves\Filament\CcpaRequests\CcpaRequestsPlugin;
+use JeffersonGoncalves\Filament\CcpaRetention\CcpaRetentionPlugin;
+use JeffersonGoncalves\Filament\CcpaRiskAssessments\CcpaRiskAssessmentsPlugin;
+use JeffersonGoncalves\Filament\CcpaVendors\CcpaVendorsPlugin;
 use JeffersonGoncalves\Filament\Pwa\FilamentPwaPlugin;
 use JeffersonGoncalves\Filament\SecurityHeaders\SecurityHeadersPlugin;
 use JeffersonGoncalves\Filament\User\UserPlugin;
@@ -45,10 +55,10 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->brandLogo(fn () => Vite::asset(config('filakit.logo')))
+            ->brandLogo(fn () => Vite::asset(config('ccpakit.logo')))
             ->brandLogoHeight(fn () => request()->is('admin/login', 'admin/password-reset/*') ? '121px' : '50px')
             ->viteTheme('resources/css/filament/admin/theme.css')
-            ->defaultThemeMode(config('filakit.theme_mode', ThemeMode::Dark))
+            ->defaultThemeMode(config('ccpakit.theme_mode', ThemeMode::Dark))
             ->discoverClusters(in: app_path('Filament/Admin/Clusters'), for: 'App\\Filament\\Admin\\Clusters')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
@@ -78,12 +88,33 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 __('User'),
                 __('Management'),
+                __('CCPA'),
                 __('Settings'),
             ])
             ->plugins([
                 SecurityHeadersPlugin::make()
                     ->navigationGroup(fn (): string => __('Settings')),
                 AdminPlugin::make(),
+                CcpaPlugin::make()
+                    ->navigationGroup('CCPA'),
+                CcpaOptOutPlugin::make()
+                    ->navigationGroup('CCPA'),
+                CcpaRequestsPlugin::make()
+                    ->navigationGroup('CCPA'),
+                CcpaRetentionPlugin::make()
+                    ->navigationGroup('CCPA'),
+                CcpaAuditLogPlugin::make()
+                    ->navigationGroup('CCPA'),
+                CcpaBreachesPlugin::make()
+                    ->navigationGroup('CCPA'),
+                CcpaNoticesPlugin::make()
+                    ->navigationGroup('CCPA'),
+                CcpaVendorsPlugin::make()
+                    ->navigationGroup('CCPA'),
+                CcpaRiskAssessmentsPlugin::make()
+                    ->navigationGroup('CCPA'),
+                CcpaMinorsPlugin::make()
+                    ->navigationGroup('CCPA'),
                 UserPlugin::make(),
                 FilamentPwaPlugin::make(),
                 FilamentDeveloperLoginsPlugin::make()
